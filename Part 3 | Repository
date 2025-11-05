@@ -1,0 +1,14 @@
+@Repository
+public class StudentRepository {
+    private final SessionFactory sf;
+    public StudentRepository(SessionFactory sf){ this.sf = sf; }
+
+    public Long save(Student s){
+        return (Long) sf.getCurrentSession().save(s);
+    }
+    public Student find(Long id){ return sf.getCurrentSession().get(Student.class, id); }
+    public void delete(Long id){
+        Student s = find(id);
+        if (s != null) sf.getCurrentSession().remove(s);
+    }
+}
