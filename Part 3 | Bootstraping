@@ -1,0 +1,10 @@
+public class SpringApp {
+    public static void main(String[] args) {
+        try (AnnotationConfigApplicationContext ctx =
+                 new AnnotationConfigApplicationContext(PersistenceConfig.class)) {
+            StudentService svc = ctx.getBean(StudentService.class);
+            Long id = svc.addStudent(new Student("Isha","isha@example.com",20));
+            System.out.println("Saved ID: " + id);
+        }
+    }
+}
