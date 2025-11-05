@@ -1,0 +1,15 @@
+public class MainCrud {
+    public static void main(String[] args) {
+        StudentDao dao = new StudentDao();
+        Long id = dao.save(new Student("Aarav", "aarav@example.com", 21));
+        System.out.println("Saved id = " + id);
+
+        Student s = dao.find(id);
+        s.setAge(22);
+        dao.update(s);
+
+        dao.findAll().forEach(st -> System.out.println(st.getName()));
+
+        dao.delete(id);
+    }
+}
