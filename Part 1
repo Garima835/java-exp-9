@@ -1,0 +1,31 @@
+// 1) Service & dependency
+public interface MessageService { String get(); }
+
+@Component
+class EmailMessageService implements MessageService {
+    @Override public String get() { return "Hello via Email"; }
+}
+
+@Component
+class Notifier {
+    private final MessageService ms;
+    @Autowired
+    Notifier(MessageService ms) { this.ms = ms; }
+    public void send() { System.out.println(ms.get()); }
+}
+
+// 2) Java-based configuration
+@Configuration
+@ComponentScan(basePackages = "com.example.di")   // adjust package
+public class AppConfig {}
+
+// 3) Bootstrap
+public class App {
+    public static void main(String[] args) {
+        try (AnnotationConfigApplicationContext ctx =
+                 new AnnotationConfigApplicationContext(AppConfig.class)) {
+            Notifier n = ctx.getBean(Notifier.class);
+            n.send();
+        }
+    }
+}
