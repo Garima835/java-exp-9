@@ -1,0 +1,46 @@
+// StudentDao.java
+package com.example.hibernate;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import java.util.List;
+
+public class StudentDao {
+
+    public Long save(Student s){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Transaction tx = session.beginTransaction();
+            Long id = (Long) session.save(s);
+            tx.commit();
+            return id;
+        }
+    }
+
+    public Student find(Long id){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            return session.get(Student.class, id);
+        }
+    }
+
+    public List<Student> findAll(){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            return session.createQuery("from Student", Student.class).list();
+        }
+    }
+
+    public void update(Student s){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Transaction tx = session.beginTransaction();
+            session.merge(s);
+            tx.commit();
+        }
+    }
+
+    public void delete(Long id){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Transaction tx = session.beginTransaction();
+            Student s = session.get(Student.class, id);
+            if (s != null) session.remove(s);
+            tx.commit();
+        }
+    }
+}
