@@ -1,0 +1,22 @@
+@Service
+public class StudentService {
+    private final StudentRepository repo;
+    public StudentService(StudentRepository repo){ this.repo = repo; }
+
+    @Transactional
+    public Long addStudent(Student s){ return repo.save(s); }
+
+    @Transactional(readOnly = true)
+    public Student get(Long id){ return repo.find(id); }
+
+    @Transactional
+    public void transferEmail(Long fromId, Long toId){
+        // Example transactional unit that will roll back on RuntimeException
+        Student a = repo.find(fromId);
+        Student b = repo.find(toId);
+        String tmp = a.getEmail();
+        a.setEmail(b.getEmail());
+        b.setEmail(tmp);
+        // If an unchecked exception occurs here, Spring will roll back automatically
+    }
+}
